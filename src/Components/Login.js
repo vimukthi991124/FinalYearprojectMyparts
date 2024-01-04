@@ -18,6 +18,7 @@ function Login({ switchForm }) {
     e.preventDefault();
     setErrors(validation(values));
   }
+
   return (
     <div className="login_container">
       <div className="login_form">
@@ -58,16 +59,21 @@ function Login({ switchForm }) {
               )}
             </div>
             <div className="submit">
-              <button className="btn">Login</button>
+              <button className="btn" type="submit">
+                Login
+              </button>
             </div>
-            <input type="checkbox" className="remember-me" />
-            Remember me
+            <div className="remember me">
+              <input type="checkbox" />
+              Remember me
+            </div>
             <br />
             <a href="#" alt="">
               Forgot password
             </a>
             <br />
-            <span className="login-link" onClick={switchForm}>
+
+            <span className="signup-link" onClick={switchForm}>
               Click here to Create Account!
             </span>
           </form>

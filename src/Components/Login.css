@@ -1,5 +1,6 @@
 .header {
-  text-align: center;
+  text-align: inherit;
+  text-align: -webkit-match-parent;
   font-family: "Times New Roman", Times, serif;
   font-weight: 500;
   color: green;
@@ -45,15 +46,18 @@ body {
   width: 200px;
 }
 
-.login-link {
-  font-size: 15px;
+.signup-link {
+  font-size: 12px;
   color: blue;
-  margin: auto;
+  margin: 0;
   cursor: pointer;
+  text-align: center;
+  text-decoration: underline;
 }
-.already-account {
-  font-size: 15px;
-  color: black;
-  margin: auto;
-  cursor: pointer;
+
+label {
+  margin-top: 1px;
+  font-weight: bolder;
+  color: #8a1538;
+  font-size: 14px;
 }

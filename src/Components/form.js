@@ -1,6 +1,6 @@
 // form.js
 import React, { useState } from "react";
-import "./styles/SignUpform.css";
+import "./SignUpform.css";
 
 // Hook for email and University ID validation
 const useEmailValidation = () => {
@@ -58,16 +58,16 @@ const useEmailValidation = () => {
 const PasswordValidator = ({ password, confirmPassword }) => {
   // Function to validate password
   const validatePassword = (values) => {
-    let error = {};
+    // let error = {};
     const minLength = 8;
-    const password_pattern =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]).{8,}$/;
+    //const password_pattern =
+    ///^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]).{8,}$/;
 
     if (!password) {
       return "Password cannot be empty";
-    } else if (!password_pattern.test(values.password)) {
-      error.password = "password not valid";
-    } else if (password !== confirmPassword) {
+    } //else if (!password_pattern.test(values.password)) {
+    // error.password = "password not valid";
+    else if (password !== confirmPassword) {
       return "Passwords do not match";
     } else if (password.length < minLength) {
       return `Password must be at least ${minLength} characters long`;
@@ -192,47 +192,55 @@ const Form = ({ switchForm }) => {
 
   // JSX for the form
   return (
-    <div className="register">
-      <h2>Sign Up</h2>
+    <div className="register-form">
+      <h2 className="signup-topic">Sign Up</h2>
       <form id="form01" className="signupform01" onSubmit={handleSubmit}>
         {/* User Type */}
-        <label>User Type:</label>
-        <select value={userType} onChange={handleUserTypeChange}>
+        <label className="label-names">User Type:</label>
+        <select
+          value={userType}
+          onChange={handleUserTypeChange}
+          className="U-type-selector"
+          name="u-type"
+        >
           <option value="Guest">Guest</option>
           <option value="University User">University User</option>
         </select>
 
         {/* First Name */}
-        <label>First Name:</label>
+        <label className="label-names">First Name:</label>
         <input
           type="text"
           value={Fname}
           placeholder="First Name"
           onChange={handleFnameChange}
           required
+          className="inputFields"
         />
 
         {/* Last Name */}
-        <label>Last Name:</label>
+        <label className="label-names">Last Name:</label>
         <input
           type="text"
           value={Lname}
           placeholder="Last Name"
           onChange={handleLnameChange}
           required
+          className="inputFields"
         />
 
         {/* University User fields */}
         {userType === "University User" && (
           <>
             <div className="University Users">
-              <label>University ID:</label>
+              <label className="label-names">University ID:</label>
               <input
                 type="text"
                 value={Uid}
                 placeholder="University ID"
                 onChange={handleUidChange}
                 required
+                className="inputFields"
               />
               {/* Display University ID error if exists */}
               {universityIdError && (
@@ -241,26 +249,28 @@ const Form = ({ switchForm }) => {
                 </p>
               )}
 
-              <label>University Email:</label>
+              <label className="label-names">University Email:</label>
               <input
                 type="email"
                 value={Uemail}
                 placeholder="University Email"
                 onChange={handleUemailChange}
                 required
+                className="inputFields"
               />
             </div>
           </>
         )}
 
         {/* Personal Email */}
-        <label>Personal Email:</label>
+        <label className="label-names">Personal Email:</label>
         <input
           type="email"
           value={email}
           placeholder="Email..."
           onChange={handleEmailChange}
           required
+          className="inputFields"
         />
         {/* Display email error if exists */}
         {emailError && (
@@ -268,13 +278,14 @@ const Form = ({ switchForm }) => {
         )}
 
         {/* Password */}
-        <label>Password:</label>
+        <label className="label-names">Password:</label>
         <input
           type="password"
           value={password}
           placeholder="Password"
           onChange={handlePasswordChange}
           required
+          className="inputFields"
         />
         {/* Password validation component */}
         <PasswordValidator
@@ -283,13 +294,14 @@ const Form = ({ switchForm }) => {
         />
 
         {/* Confirm Password */}
-        <label>Confirm Password:</label>
+        <label className="label-names">Confirm Password:</label>
         <input
           type="password"
           value={confirmpassword}
           placeholder="Confirm password"
           onChange={handleConfirmPasswordChange}
           required
+          className="inputFields"
         />
         {/* Display required field error if exists */}
         {requiredFieldError && (
@@ -297,17 +309,19 @@ const Form = ({ switchForm }) => {
         )}
 
         {/* Form submission buttons */}
-        <button className="btn" onClick={handleSubmit}>
+        <button className="submitBtn" type="submit" onClick={handleSubmit}>
           Submit
         </button>
-        <button className="btn" onClick={handleClear}>
+        <button className="clearBtn" type="reset" onClick={handleClear}>
           Clear
         </button>
 
-        <p className="already-account">Already have an Account?</p>
-        <span className="login-link" onClick={switchForm}>
-          Click here to Login
-        </span>
+        <p className="already-account">
+          Already have an Account?
+          <span className="login-link" onClick={switchForm}>
+            Click here to Login
+          </span>
+        </p>
       </form>
     </div>
   );
