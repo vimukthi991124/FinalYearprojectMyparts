@@ -27,8 +27,10 @@ const useEmailValidation = () => {
 
     if (!universityIdRegex.test(universityId)) {
       setUniversityIdError("Invalid University ID format");
+      return false; // University ID is invalid
     } else {
       setUniversityIdError("");
+      return true; // University ID is valid
     }
   };
 
@@ -56,17 +58,17 @@ const useEmailValidation = () => {
 // Component for password validation
 const PasswordValidator = ({ password, confirmPassword }) => {
   // Function to validate password
-  const validatePassword = (values) => {
-    // let error = {};
+  const validatePassword = () => {
+    let error = {};
     const minLength = 8;
-    //const password_pattern =
-    ///^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]).{8,}$/;
+    const password_pattern =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]).{8,}$/;
 
     if (!password) {
       return "Password cannot be empty";
-    } //else if (!password_pattern.test(values.password)) {
-    // error.password = "password not valid";
-    else if (password !== confirmPassword) {
+    } else if (!password_pattern.test(password)) {
+      error.password = "Password not valid";
+    } else if (password !== confirmPassword) {
       return "Passwords do not match";
     } else if (password.length < minLength) {
       return `Password must be at least ${minLength} characters long`;
@@ -78,7 +80,7 @@ const PasswordValidator = ({ password, confirmPassword }) => {
   // Get password error message
   const passwordError = validatePassword();
 
-  // Display password error if exists
+  // Display password error if it exists
   return (
     <>
       {passwordError && (
@@ -152,8 +154,19 @@ const Form = ({ switchForm }) => {
     validateEmail(email);
     validateUniversityId(Uid);
 
-    if (!Fname || !Lname || !email || !password || !confirmpassword) {
+    if (!Fname || !Lname || !Uemail || !password || !confirmpassword) {
       setRequiredFieldError("All fields are required");
+      return;
+    }
+    const isUniversityIdValid = validateUniversityId(Uid);
+
+    if (!isUniversityIdValid) {
+      return; // Do not proceed with form submission
+    }
+
+    // Check if passwords match
+    if (password !== confirmpassword) {
+      setRequiredFieldError("Passwords do not match");
       return;
     }
 
