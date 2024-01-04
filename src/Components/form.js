@@ -1,4 +1,3 @@
-// form.js
 import React, { useState } from "react";
 import "./SignUpform.css";
 
