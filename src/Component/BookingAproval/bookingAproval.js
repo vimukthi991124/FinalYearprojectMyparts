@@ -1,12 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal, Input } from "antd";
 import axios from "axios";
 import "./bookingAproval.css";
+import moment from "moment";
 
-const BookingApproval = () => {
+const BookingApproval = ({ bookingDate, Time }) => {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [bookings, setBookings] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [comment, setComment] = useState("");
+  const dateOnly = moment(bookingDate).format("YYYY-MM-DD");
+  const timeOnly = moment(Time).format("HH:mm");
+
+  // const mockBookingWithImages = {
+  //   organizationName: "Sample Organization",
+  //   organizationAddress: "Sample Address",
+  //   facility: "Sample Facility",
+  //   bookingDate: "2024-02-24",
+  //   Time: "14:00",
+  //   designation: "Sample Designation",
+  //   description: "Sample Description",
+  //   status: "pending",
+  //   userNICImg: "nic-image.jpg",
+  //   permissionLetter: "permission-letter.pdf",
+  // };
 
   useEffect(() => {
     fetchBookings();
@@ -18,6 +37,7 @@ const BookingApproval = () => {
         "http://localhost:4000/api/booking/getAllBookings"
       );
       setBookings(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching booking data", error);
     }
@@ -29,11 +49,11 @@ const BookingApproval = () => {
       dataIndex: "organizationName",
       key: "organizationName",
     },
-    // {
-    //   title: "organization Address",
-    //   dataIndex: "organizationAddress",
-    //   key: "facility",
-    // },
+    {
+      title: "organization Address",
+      dataIndex: "organizationAddress",
+      key: "facility",
+    },
     {
       title: "Selected Facility",
       dataIndex: "facility",
@@ -43,22 +63,9 @@ const BookingApproval = () => {
       title: "Booking Date",
       dataIndex: "bookingDate",
       key: "bookingDate",
+      render: (text, record) => dateOnly,
     },
-    // {
-    //   title: "Booking Time",
-    //   dataIndex: "Time",
-    //   key: "Time",
-    // },
-    // {
-    //   title: "Designation",
-    //   dataIndex: "designation",
-    //   key: "designation",
-    // },
-    // {
-    //   title: "Description",
-    //   dataIndex: "description",
-    //   key: "description",
-    // },
+
     {
       title: "Status",
       dataIndex: "status",
@@ -76,8 +83,9 @@ const BookingApproval = () => {
   ];
 
   const handleViewDetails = (booking) => {
+    // setSelectedBooking(mockBookingWithImages);
     setSelectedBooking(booking);
-    setIsModalVisible(true);
+    setIsModalVisible(true); // Open the modal
   };
 
   const handleApprove = () => {
@@ -95,12 +103,13 @@ const BookingApproval = () => {
         className="ant-table-container"
         dataSource={bookings}
         columns={columns}
+        style={{ margin: "auto", width: "80%" }}
       />
 
       <Modal
-        className="ant-modal-content"
-        title="Booking Details"
-        open={isModalVisible}
+        className="ant-modal-content custom-model"
+        title="Booking Details  "
+        visible={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
         footer={[
           <Button key="approve" onClick={handleApprove}>
@@ -110,40 +119,98 @@ const BookingApproval = () => {
             Reject
           </Button>,
         ]}
+        style={{ margin: "auto" }}
       >
-        <p className="model-pharagraph">
-          <strong className="model-pharagraph">Organization Name:</strong>{" "}
-          {selectedBooking?.organizationName}
-        </p>
-        <p className="model-pharagraph">
-          <strong className="model-pharagraph">Organization Adress:</strong>{" "}
-          {selectedBooking?.organizationAddress}
-        </p>
-        <p className="model-pharagraph">
-          <strong className="model-pharagraph">Selected Facility:</strong>{" "}
-          {selectedBooking?.facility}
-        </p>
-        <p className="model-pharagraph">
-          <strong className="model-pharagraph">Booking Date:</strong>{" "}
-          {selectedBooking?.bookingDate}
-        </p>
-        <p className="model-pharagraph">
-          <strong className="model-pharagraph">Booking Time:</strong>{" "}
-          {selectedBooking?.Time}
-        </p>
-        <p className="model-pharagraph">
-          <strong className="model-pharagraph">Designation:</strong>{" "}
-          {selectedBooking?.designation}
-        </p>
-        <p className="model-pharagraph">
-          <strong className="model-pharagraph">Description:</strong>{" "}
-          {selectedBooking?.description}
-        </p>
-        <p className="model-pharagraph">
-          <strong className="model-pharagraph">Status:</strong>{" "}
-          {selectedBooking?.status}
-        </p>
+        {selectedBooking && (
+          <>
+            <hr></hr>
+            <p className="model-pharagraph">
+              <strong className="model-pharagraph">Organization Name:</strong>{" "}
+              {selectedBooking.organizationName}
+            </p>
+            <p className="model-pharagraph">
+              <strong className="model-pharagraph">
+                Organization Address:
+              </strong>{" "}
+              {selectedBooking.organizationAddress}
+            </p>
+            <p className="model-pharagraph">
+              <strong className="model-pharagraph">Selected Facility:</strong>{" "}
+              {selectedBooking.facility}
+            </p>
+            <p className="model-pharagraph">
+              <strong className="model-pharagraph">Booking Date:</strong>{" "}
+              {dateOnly}
+            </p>
+            <p className="model-pharagraph">
+              <strong className="model-pharagraph">Booking Time:</strong>{" "}
+              {timeOnly}
+            </p>
+            <p className="model-pharagraph">
+              <strong className="model-pharagraph">Designation:</strong>{" "}
+              {selectedBooking.designation}
+            </p>
+            <p className="model-pharagraph">
+              <strong className="model-pharagraph">Description:</strong>{" "}
+              {selectedBooking.description}
+            </p>
+            <p className="model-pharagraph">
+              <strong className="model-pharagraph">Status:</strong>{" "}
+              {selectedBooking.status}
+            </p>
+            <p className="model-pharagraph">
+              <strong className="model-pharagraph">Permission Letter:</strong>{" "}
+              {selectedBooking.permissionLetter ? (
+                <a
+                  href="#"
+                  onClick={() =>
+                    setSelectedImage(selectedBooking.permissionLetter)
+                  }
+                >
+                  View Permission Letter
+                </a>
+              ) : (
+                "Not Uploaded"
+              )}
+            </p>
+            <p className="model-pharagraph">
+              <strong className="model-pharagraph">NIC Image:</strong>{" "}
+              {selectedBooking.userNICImg ? (
+                <a
+                  href="#"
+                  onClick={() => setSelectedImage(selectedBooking.userNICImg)}
+                >
+                  View NIC Image
+                </a>
+              ) : (
+                "Not Uploaded"
+              )}
+            </p>
+            <Input.TextArea
+              className="add-comment"
+              placeholder="Add a comment"
+              value={comment}
+              autoSize={{ minRows: 2, maxRows: 8 }}
+              onChange={(e) => setComment(e.target.value)}
+            />
+          </>
+        )}
       </Modal>
+
+      {selectedImage && (
+        <Modal
+          title="Image"
+          visible={modalVisible}
+          onCancel={() => setSelectedImage(null)}
+          footer={null}
+        >
+          <img
+            src={`http://localhost:4000/uploads/${selectedImage}`}
+            alt="Uploaded"
+            style={{ width: "100%" }}
+          />
+        </Modal>
+      )}
     </div>
   );
 };
